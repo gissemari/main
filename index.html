@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gissella Bejarano | AI4Good Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+:root {
+  --ink: #1f1631;
+  --paper: #f7f3fc;
+  --rust: #7c4dff;
+  --gold: #c6a8ff;
+  --slate: #5b4b73;
+  --mist: #e6ddf5;
+  --accent: #8b5cf6;
+}
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(245,240,232,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--mist);
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--rust);
+      text-transform: uppercase;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2.5rem;
+    }
+
+    nav a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--slate);
+      transition: color 0.2s;
+    }
+
+    nav a:hover { color: var(--rust); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 4rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 6vw, 6.5rem);
+      font-weight: 600;
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-name em {
+      display: block;
+      font-style: italic;
+      color: var(--rust);
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      color: var(--slate);
+      max-width: 400px;
+      margin-bottom: 3rem;
+      line-height: 1.8;
+    }
+
+    .hero-links {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.8rem 1.8rem;
+      border: 1.5px solid var(--ink);
+      color: var(--ink);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .btn:hover, .btn.primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn.primary:hover {
+      background: var(--rust);
+      border-color: var(--rust);
+      color: white;
+    }
+
+    .hero-right {
+      position: relative;
+      background: var(--slate);
+      overflow: hidden;
+    }
+
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+    135deg,
+    #8b5cf6 0%,
+    #5b21b6 55%,
+    #2e1065 100%
+  );
+      opacity: 0.92;
+    }
+
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.04) 39px, rgba(255,255,255,0.04) 40px);
+      z-index: 1;
+    }
+
+    .hero-stat-block {
+      position: absolute;
+      bottom: 5rem;
+      left: 3rem;
+      right: 3rem;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      padding: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 600;
+      color: white;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hero-quote {
+      position: absolute;
+      top: 8rem;
+      left: 3rem;
+      right: 3rem;
+      z-index: 2;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.6;
+      max-width: 380px;
+    }
+
+    /* ── SECTION COMMON ── */
+    section { padding: 7rem 4rem; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--rust);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.5rem);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 6rem;
+      align-items: start;
+      border-top: 1px solid var(--mist);
+    }
+
+    .about-photo-wrap {
+      position: relative;
+    }
+
+    .about-photo {
+      width: 50%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      display: block;
+      background: var(--mist);
+    }
+
+    .photo-placeholder {
+      width: 50%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, var(--slate), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+
+    .photo-placeholder svg {
+      width: 80px;
+      height: 80px;
+      opacity: 0.4;
+      fill: white;
+    }
+
+    .about-photo-wrap::before {
+      content: '';
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      right: -1.2rem;
+      bottom: -1.2rem;
+      border: 2px solid #b794f4;
+      z-index: -1;
+    }
+
+    .about-body p {
+      margin-bottom: 1.4rem;
+      font-size: 1.05rem;
+      color: var(--slate);
+    }
+
+    .about-body strong { color: var(--ink); font-weight: 500; }
+
+    .affil-list {
+      margin-top: 2.5rem;
+      list-style: none;
+    }
+
+    .affil-list li {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--mist);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--slate);
+    }
+
+    .affil-list li::before {
+      content: '▸';
+      color: var(--rust);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+    }
+
+    /* ── RESEARCH ── */
+    #research {
+      background: var(--ink);
+      color: white;
+    }
+
+    #research .section-label { color: var(--gold); }
+    #research .section-title { color: white; }
+
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 1rem;
+    }
+
+    .research-card {
+      padding: 2.5rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    .research-card:hover { background: rgba(255,255,255,0.08); }
+
+    .research-card::before {
+      content: attr(data-num);
+      position: absolute;
+      top: 1.5rem;
+      right: 1.8rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 5rem;
+      color: rgba(255,255,255,0.05);
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .research-icon {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .research-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 0.8rem;
+    }
+
+    .research-card p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+    }
+
+    /* ── PUBLICATIONS ── */
+    #publications { border-top: 1px solid var(--mist); }
+
+    .pub-list { list-style: none; }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--mist);
+      transition: all 0.2s;
+    }
+
+    .pub-item:hover { padding-left: 1rem; }
+
+    .pub-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--gold);
+      padding-top: 0.3rem;
+      min-width: 3rem;
+    }
+
+    .pub-body h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+      line-height: 1.4;
+    }
+
+    .pub-body p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--slate);
+      letter-spacing: 0.02em;
+    }
+
+    .pub-venue {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: white;
+      background: var(--rust);
+      padding: 0.3rem 0.7rem;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    /* ── AWARDS ── */
+    #awards {
+      background: linear-gradient(
+    160deg,
+    #31204d 0%,
+    #1e1333 100%
+  );
+      color: white;
+    }
+
+    #awards .section-label { color: var(--gold); }
+    #awards .section-title { color: white; }
+
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .award-card {
+      padding: 2rem 2.5rem;
+      border-left: 3px solid var(--gold);
+      background: rgba(255,255,255,0.04);
+      position: relative;
+    }
+
+    .award-amount {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .award-title {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: white;
+      margin-bottom: 0.3rem;
+    }
+
+    .award-source {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .award-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.3);
+      margin-top: 0.6rem;
+    }
+
+    .honor-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .honor-badge {
+      padding: 0.6rem 1.2rem;
+      border: 1px solid rgba(201,150,58,0.4);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* ── TEAM ── */
+    #team { border-top: 1px solid var(--mist); }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .team-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-avatar {
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, var(--slate), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .team-avatar::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .team-card:hover .team-avatar::after { transform: scaleX(1); }
+
+    .team-name {
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    .team-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--rust);
+    }
+
+    .team-affil {
+      font-size: 0.8rem;
+      color: var(--slate);
+      margin-top: 0.2rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--ink);
+      color: white;
+      text-align: center;
+      padding: 6rem 4rem;
+    }
+
+    #contact .section-label { color: var(--gold); }
+    #contact .section-title { color: white; margin-bottom: 1rem; }
+
+    #contact p {
+      color: rgba(255,255,255,0.55);
+      margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.9rem 2rem;
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.25s;
+    }
+
+    .contact-link:hover {
+      background: var(--rust);
+      border-color: var(--rust);
+    }
+
+    footer {
+      background: #0a0e12;
+      color: rgba(255,255,255,0.25);
+      text-align: center;
+      padding: 1.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-left > * {
+      opacity: 0;
+      animation: fadeUp 0.8s forwards;
+    }
+
+    .hero-left .hero-eyebrow { animation-delay: 0.1s; }
+    .hero-left .hero-name    { animation-delay: 0.25s; }
+    .hero-left .hero-tagline { animation-delay: 0.4s; }
+    .hero-left .hero-links   { animation-delay: 0.55s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { gap: 1.2rem; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { min-height: 350px; }
+      .hero-left { padding: 7rem 1.5rem 3rem; }
+      section { padding: 4rem 1.5rem; }
+      #about { grid-template-columns: 1fr; gap: 3rem; }
+      .research-grid { grid-template-columns: 1fr; }
+      .awards-grid { grid-template-columns: 1fr; }
+      .pub-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">AI4Good Lab</span>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#awards">Awards</a></li>
+      <li><a href="#team">Lab</a></li>
+      <li><a href="https://gissemari.github.io/blog/">Blogs</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Assistant Professor · Marist University</p>
+      <h1 class="hero-name">Gissella<em>Bejarano</em></h1>
+      <p class="hero-tagline">
+        Machine learning for sequential data — sign language, iconicity, and AI for social good. 
+        Bridging communities across Latin America, the Deaf world, and computational research.
+      </p>
+      <div class="hero-links">
+        <a href="#publications" class="btn primary">View Publications</a>
+        <a href="https://scholar.google.com/citations?user=P3tutAsAAAAJ" target="_blank" class="btn">Google Scholar</a>
+        <a href="https://linkedin.com/in/gissemari" target="_blank" class="btn">LinkedIn</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-pattern"></div>
+      <p class="hero-quote">
+        "Enabling AI to understand sign language — advancing both capability and access."
+      </p>
+      <div class="hero-stat-block">
+        <div class="stat-item">
+          <div class="stat-num">14+</div>
+          <div class="stat-label">Publications</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">$775K</div>
+          <div class="stat-label">Research Funding</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Citations</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">2022</div>
+          <div class="stat-label">AI2050 Fellow</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-photo-wrap">
+      <img 
+        src="images/GB.jpg" 
+        alt="Profile photo"
+        class="about-photo"
+      >
+    </div>
+    <div class="about-body">
+      <p class="section-label">About</p>
+      <h2 class="section-title">Researcher,<br>Educator, &amp; Advocate</h2>
+      <p>
+        Dr. Gissella Bejarano is an <strong>Assistant Professor of Computer Science</strong> at Marist University, where she leads the AI2050 Project exploring analogical reasoning through iconicity in signs and gestures.
+      </p>
+      <p>
+        Her research sits at the intersection of <strong>machine learning, sign language processing, and AI for social good</strong>. She led the creation of the first <strong>Bilingual Peruvian Sign Language–Spanish Online Dictionary</strong> (dvlsp.link), a landmark resource for the Deaf community in Peru.
+      </p>
+      <p>
+        Originally from Peru, Dr. Bejarano earned her PhD from SUNY Binghamton as a <strong>Fulbright Scholar</strong> and conducted postdoctoral research at Baylor University. She has served as an AI expert for the Peruvian Government and is an active member of LatinxInAI and the Research Experience for Peruvian Undergrads (REPU).
+      </p>
+      <ul class="affil-list">
+        <li>Marist University — Assistant Professor, Computer Science (2023–present)</li>
+        <li>Baylor University — Postdoctoral Researcher (2021–2023)</li>
+        <li>Universidad Peruana Cayetano Heredia — Visiting Professor (2021–2022)</li>
+
+      </ul>
+    </div>
+  </section>
+
+  <!-- RESEARCH -->
+  <section id="research">
+    <p class="section-label">Research Focus</p>
+    <h2 class="section-title">What We Study</h2>
+    <div class="research-grid">
+      <div class="research-card" data-num="01">
+        <div class="research-icon">🤟</div>
+        <h3>Sign Language Recognition</h3>
+        <p>Isolated and continuous sign language recognition using pose estimation, skeleton-based models, and on-device inference techniques for accessibility in real-world conditions.</p>
+      </div>
+      <div class="research-card" data-num="02">
+        <div class="research-icon">🧩</div>
+        <h3>Analogical Reasoning &amp; Iconicity</h3>
+        <p>Exploring how AI can understand iconicity — the visual resemblance between a sign and its meaning — through the AI2050 Project, bridging linguistics and machine learning.</p>
+      </div>
+      <div class="research-card" data-num="03">
+        <div class="research-icon">🌎</div>
+        <h3>AI for Social Good</h3>
+        <p>Developing AI systems that center underrepresented communities, from Peruvian Sign Language resources to smart city forecasting and emergency response prediction.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <p class="section-label">Selected Publications</p>
+    <h2 class="section-title">Recent Work</h2>
+    <ul class="pub-list">
+
+      <li class="pub-item">
+        <span class="pub-year">2025</span>
+        <div class="pub-body">
+          <h4>WholeBodyPose: A Unified End-to-End Framework for Sign Language Recognition and Pose-Based Analysis</h4>
+          <p>Lazo-Quispe, C., Castro-Cruz, R., Salazar-Espinosa, M., Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">ICMV</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2025</span>
+        <div class="pub-body">
+          <h4>An Interdisciplinary Approach to Sign Language Data Set Collection of Native Signers</h4>
+          <p>Rodríguez-Mondoñedo, M., Cerna-Herrera, F., Ramos, C., Arnaiz, A. et al., Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">PETRA</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2024</span>
+        <div class="pub-body">
+          <h4>Evaluating Model Compression Techniques for On-Device Browser Sign Language Recognition Inference</h4>
+          <p>Salazar, M., Bandara, D., &amp; Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">INTERCON</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2024</span>
+        <div class="pub-body">
+          <h4>Lessons from Deploying the First Bilingual Peruvian Sign Language–Spanish Online Dictionary</h4>
+          <p>Huamani, J., Vasquez, C., Oporto, S., Cerna, F., Ramos, C., Rodriguez-Mondoñedo, M., Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">LREC-COLING</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div class="pub-body">
+          <h4>Comparing Incremental Learning Approaches for a Growing Sign Language Dictionary</h4>
+          <p>Huamani, J., Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">SIMBig</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2023</span>
+        <div class="pub-body">
+          <h4>Isolated Sign Language Recognition based on Tree Structure Skeleton Images</h4>
+          <p>Laines, D., Gonzalez-Mendoza, M., Ochoa-Ruiz, G., Bejarano, G.</p>
+        </div>
+        <span class="pub-venue">CVPR Workshop</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2022</span>
+        <div class="pub-body">
+          <h4>PeruSIL: A Framework to Build a Continuous Peruvian Sign Language Interpretation Dataset</h4>
+          <p>Bejarano, G., Huamani-Malca, J., Cerna-Herrera, F., Alva-Manchego, F., Rivas, P.</p>
+        </div>
+        <span class="pub-venue">LREC</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2022</span>
+        <div class="pub-body">
+          <h4>Study of Question Answering on Legal Software Documents using BERT-based Models</h4>
+          <p>Quevedo, E., Rahman, M.S., Bejarano, G., Cerny, T., Rivas, P.</p>
+        </div>
+        <span class="pub-venue">NAACL</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2019</span>
+        <div class="pub-body">
+          <h4>Deep Latent Generative Models for Energy Disaggregation</h4>
+          <p>Bejarano, G., Defazio, D., Ramesh, A.</p>
+        </div>
+        <span class="pub-venue">AAAI</span>
+      </li>
+
+      <li class="pub-item">
+        <span class="pub-year">2018</span>
+        <div class="pub-body">
+          <h4>Predictive Analytics for Smart Water Management in Developing Regions</h4>
+          <p>Bejarano, G., Jain, M., Ramesh, A., Seetharam, A., Mishra, A.</p>
+        </div>
+        <span class="pub-venue">SMARTCOMP</span>
+      </li>
+
+    </ul>
+  </section>
+
+  <!-- AWARDS -->
+  <section id="awards">
+    <p class="section-label">Funding &amp; Recognition</p>
+    <h2 class="section-title">Awards &amp; Grants</h2>
+    <div class="awards-grid">
+      <div class="award-card">
+        <div class="award-amount">$375K</div>
+        <div class="award-title">REU Statistical Mathematical &amp; Research Training (SMART)</div>
+        <div class="award-source">National Science Foundation</div>
+        <div class="award-year">2025 – 2028</div>
+      </div>
+      <div class="award-card">
+        <div class="award-amount">$293K</div>
+        <div class="award-title">AI2050 Early Career Fellowship — Iconicity in Sign Language &amp; Gestures</div>
+        <div class="award-source">Schmidt Sciences (formerly Schmidt Futures)</div>
+        <div class="award-year">2022 – 2026</div>
+      </div>
+      <div class="award-card">
+        <div class="award-amount">$10K</div>
+        <div class="award-title">AWS Research Credits — Peruvian Sign Language Dictionary</div>
+        <div class="award-source">Amazon Web Services</div>
+        <div class="award-year">2022 – 2024</div>
+      </div>
+      <div class="award-card">
+        <div class="award-amount">$3.6K</div>
+        <div class="award-title">Workshop of Sign Language Annotation Grant</div>
+        <div class="award-source">NAACL for Americas</div>
+        <div class="award-year">2024</div>
+      </div>
+      <div class="award-card">
+        <div class="award-amount">$100K</div>
+        <div class="award-title">Algorithm to Optimize Public Transportation Routes (IB-2013 Nro 182)</div>
+        <div class="award-source">FINCyT Peru</div>
+        <div class="award-year">2013 – 2015</div>
+      </div>
+    </div>
+
+    <div class="honor-row">
+      <span class="honor-badge">Fulbright Scholar · 2015</span>
+      <span class="honor-badge">Google Anita Borg Scholarship · GHC 2017</span>
+      <span class="honor-badge">Google Travel Scholarship · LxMLS 2017</span>
+      <span class="honor-badge">Teaching Assistant Award · SUNY Binghamton 2021</span>
+      <span class="honor-badge">IEEE Senior Member</span>
+      <span class="honor-badge">Sigma Xi</span>
+      <span class="honor-badge">UPE Honor Society</span>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team">
+    <p class="section-label">AI4Good Lab · Marist University</p>
+    <h2 class="section-title">The Research Group</h2>
+
+    <div class="team-grid">
+
+      <div class="team-card">
+        <div class="team-avatar">JH</div>
+        <div class="team-name">Joe Huamani-Malca</div>
+        <div class="team-role">Collaborator</div>
+        <div class="team-affil">Sign Language Processing</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">MS</div>
+        <div class="team-name">Mauricio Salazar</div>
+        <div class="team-role">Collaborator</div>
+        <div class="team-affil">Model Compression · Sign NLP</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">CV</div>
+        <div class="team-name">Carlos Vásquez Roque</div>
+        <div class="team-role">Collaborator</div>
+        <div class="team-affil">Sign Language Dictionary</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">CL</div>
+        <div class="team-name">Cristian Lazo-Quispe</div>
+        <div class="team-role">Collaborator</div>
+        <div class="team-affil">Lightweight models</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <p class="section-label">Get in Touch</p>
+    <h2 class="section-title">Contact</h2>
+    <p>Reach out for research collaboration, speaking invitations, or mentorship opportunities.</p>
+    <div class="contact-links">
+      <a href="mailto:gissella.bejarano@marist.edu" class="contact-link">✉ Email</a>
+      <a href="https://linkedin.com/in/gissemari" target="_blank" class="contact-link">in LinkedIn</a>
+      <a href="https://scholar.google.com/citations?user=P3tutAsAAAAJ" target="_blank" class="contact-link">📚 Scholar</a>
+      <a href="https://www.marist.edu/computer-science-math/faculty/gissella-bejarano" target="_blank" class="contact-link">🏫 Marist Profile</a>
+      <a href="https://dvlsp.link" target="_blank" class="contact-link">🤟 PeruSIL Dictionary</a>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Gissella Bejarano · Marist University · AI4Good Lab · Built with GitHub Pages
+  </footer>
+
+</body>
+</html>
